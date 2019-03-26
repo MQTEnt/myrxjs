@@ -1,3 +1,3 @@
-#Learning RxJS:
-Using JavaScript ES6 by Babel
-Run `npm run start`
+### Learning RxJS:
+___Using JavaScript ES6 by Babel___
+##### Run `npm run start`
