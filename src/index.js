@@ -1,21 +1,24 @@
-import { ajax } from 'rxjs/ajax';
-import { map, catchError } from 'rxjs/operators';
-import { XMLHttpRequest } from 'xmlhttprequest';
+import { of, from } from 'rxjs'; 
+import { map, mergeMap, delay, mergeAll } from 'rxjs/operators';
 
-function createXHR() {
-  return new XMLHttpRequest();
+const getData = (param) => {
+  return of(`retrieved new data with param ${param}`).pipe(
+    delay(1000)
+  )
 }
 
-const obs$ = ajax(
-		{
-			createXHR,
-			url: 'http://localhost:8000/api/example', //Host from other Server
-			crossDomain: true,
-			withCredentials: false,
-			method: 'GET',
-			responseType: 'json'
-		}).pipe(
-			map(result => result.response),
-			catchError(e => console.log('error: ', e))
-		);
-obs$.subscribe(result => console.log(result));
+// using a regular map (Have to subscribe 2 times)
+from([1,2,3,4]).pipe(
+  map(param => getData(param))
+).subscribe(val => val.subscribe(data => console.log(data)));
+
+// using map and mergeAll (Have to add mergeAll)
+from([1,2,3,4]).pipe(
+  map(param => getData(param)),
+  mergeAll()
+).subscribe(val => console.log(val));
+
+// using mergeMap (The best way)
+from([1,2,3,4]).pipe(
+  mergeMap(param => getData(param))
+).subscribe(val => console.log(val));
