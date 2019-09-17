@@ -1,7 +1,15 @@
-import { range } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+/*
+  Create an observable that emits 'Hello' and 'World' on subscription.
+*/
+const hello = Observable.create((observer) => {
+  observer.next('Hello');
+  observer.next('World');
+});
 
-range(1, 10).pipe(
-  filter(x => x % 2 === 1),
-  map(x => x + x)
-).subscribe(x => console.log(x));
+const subscribe = hello.subscribe(val => console.log(val));
+/*
+ Output:
+ >>> Hello
+ >>> World
+*/
